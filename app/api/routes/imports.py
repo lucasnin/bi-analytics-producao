@@ -1,4 +1,5 @@
 import os
+from datetime import date, datetime
 from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
@@ -23,6 +24,14 @@ def production_import_status():
 @router.get("/production/filters")
 def production_filter_options():
     settings = get_settings()
+    if settings.data_provider == "demo":
+        today = date.today()
+        return {
+            "managements": [], "manual_managements": [], "teams": [], "operators": [],
+            "products": [], "modalities": [], "agreements": [],
+            "statuses": ["Integrado", "Em análise", "Pendente"],
+            "years": [today.year], "latest_date": today, "latest_update": datetime.now(),
+        }
     return CsvProductionRepository(settings.csv_production_path).filter_options()
 
 

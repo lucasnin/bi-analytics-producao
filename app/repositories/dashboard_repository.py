@@ -37,6 +37,11 @@ class DemoDashboardRepository(DashboardRepository):
             "goal": goal,
             "previous": total * Decimal("0.91"),
             "daily": daily,
+            "daily_by_status": {
+                "Integrado": [item["value"] * Decimal("0.82") for item in daily],
+                "Em análise": [item["value"] * Decimal("0.11") for item in daily],
+                "Pendente": [item["value"] * Decimal("0.07") for item in daily],
+            },
             "teams": teams,
             "operators": operators,
             "managements": managements,
@@ -58,4 +63,3 @@ class MySQLDashboardRepository(DashboardRepository):
         raise RuntimeError(
             "O mapeamento MySQL ainda não foi configurado. Preencha MYSQL_MAPPING.md e implemente as views autorizadas."
         )
-

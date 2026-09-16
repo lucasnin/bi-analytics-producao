@@ -2,6 +2,7 @@
   const latest = new Date('2026-09-15T15:08:00-03:00');
   const labels = ['01/09','02/09','03/09','04/09','08/09','09/09','10/09','11/09','14/09','15/09'];
   const values = [980325,729630,1035643,978403,1194220,1087460,1128310,1268920,965376,233844];
+  const dailyIntegratedValues = [456000,338000,481000,455000,555000,505000,524000,590000,390398.48,265967.53];
   const total = values.reduce((sum, value) => sum + value, 0);
   const integrated = 4560366.01;
   const entities = (names, base) => names.map((label, index) => {
@@ -36,7 +37,7 @@
     operators:operators.map(row=>({label:row.label,value:row.inserted})),
     managements:managements.map(row=>({label:row.label,value:row.inserted})), statuses,
     daily_by_status:{
-      Integrado:values.map(value=>value*.47), Andamento:values.map(value=>value*.32),
+      Integrado:dailyIntegratedValues, Andamento:values.map(value=>value*.32),
       Pendente:values.map(value=>value*.08), Reprovado:values.map(value=>value*.13),
     }, monthly,
     insights:[{type:'alert',title:'Evolução no período',text:'A produção está 12,8% abaixo do ritmo projetado para o fechamento.'}],
@@ -73,9 +74,22 @@
       if (question.includes('equipe')) return json({answer:`A equipe Uruguai lidera o período com ${brl(teams[0].integrated)} integrados.`,visualization:'ranking',value_format:'currency',data:teams.slice(0,5).map(row=>({label:row.label,value:row.integrated}))});
       if (question.includes('gerência') || question.includes('gerencia')) return json({answer:`A gerência Térreo lidera o período com ${brl(managements[0].integrated)} integrados.`,visualization:'ranking',value_format:'currency',data:managements.map(row=>({label:row.label,value:row.integrated}))});
       if (question.includes('quantos') || question.includes('quantidade')) return json({answer:'A quantidade de contratos integrados no período é 741.',visualization:'kpi',value_format:'number',data:[]});
-      const period = question.includes('ontem') ? 'em 14/09/2026' : 'no período selecionado';
-      return json({answer:`O valor integrado ${period} é ${brl(question.includes('ontem')?390398.48:integrated)}.`,visualization:'kpi',value_format:'currency',data:[]});
+      const explicitDate = question.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/);
+      const requestedDate = question.includes('ontem')
+        ? '14/09/2026'
+        : question.includes('hoje')
+          ? '15/09/2026'
+          : explicitDate
+            ? `${String(explicitDate[1]).padStart(2,'0')}/${String(explicitDate[2]).padStart(2,'0')}/${explicitDate[3] ? (explicitDate[3].length === 2 ? `20${explicitDate[3]}` : explicitDate[3]) : '2026'}`
+            : null;
+      if (requestedDate) {
+        const dayMonth = requestedDate.slice(0,5), dayIndex = labels.indexOf(dayMonth);
+        if (dayIndex >= 0) return json({answer:`O valor integrado em ${requestedDate} é ${brl(dailyIntegratedValues[dayIndex])}.`,visualization:'kpi',value_format:'currency',data:[]});
+        return json({answer:`Não encontrei integração em ${requestedDate} nos dados disponíveis.`,visualization:'kpi',value_format:'currency',data:[]});
+      }
+      return json({answer:`O valor integrado no período selecionado é ${brl(integrated)}.`,visualization:'kpi',value_format:'currency',data:[]});
     }
     return json({detail:'Rota indisponível na demonstração.'},404);
   };
 })();
+

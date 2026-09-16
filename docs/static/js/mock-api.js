@@ -4,7 +4,7 @@
     'valor_contrato','valor_liberacao','Equipe_Padronizada','operador','gerente',
     'Gerente_Manual','data_atualizacao','data_cadastro','data_integracao',
   ];
-  const DB_NAME = 'bi-analytics-browser';
+  const DB_NAME = 'bi-analytics-browser-v2';
   const DB_STORE = 'imports';
   const DB_KEY = 'production';
   const latest = new Date('2026-09-15T15:08:00-03:00');

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BI Analytics AI</title>
+  <meta name="description" content="Inteligência comercial clara, segura e acionável.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/dashboard.css">
+  <link rel="stylesheet" href="./static/css/polish.css">
+  <link rel="stylesheet" href="./static/css/chatbot.css">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script><script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand"><span class="brand-mark">B</span><div><strong>BI Analytics</strong><small>AI Intelligence</small></div></div>
+  <nav>
+    <p>VISÃO GERAL</p><a class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i>Dashboard Executivo</a>
+    <p>ANÁLISES</p><a data-page="production"><i data-lucide="chart-no-axes-combined"></i>Produção</a><a data-page="integrated"><i data-lucide="badge-dollar-sign"></i>Pagos / Integrados</a><a data-page="teams"><i data-lucide="users"></i>Equipes</a><a data-page="operators"><i data-lucide="user-round"></i>Operadores</a><a data-page="managements"><i data-lucide="building-2"></i>Gerências</a><a data-page="projection"><i data-lucide="telescope"></i>Projeção</a><a data-page="comparisons"><i data-lucide="git-compare-arrows"></i>Comparativos</a>
+    <p>INTELIGÊNCIA</p><a href="#ai" class="ai-link"><i data-lucide="sparkles"></i>IA Analytics <span>NOVO</span></a><a><i data-lucide="settings"></i>Administração</a>
+  </nav>
+  <div class="profile"><div class="avatar">LA</div><div><strong>Lucas Araújo</strong><small>Diretoria</small></div><i data-lucide="chevrons-up-down"></i></div>
+</aside>
+<main>
+  <header><div><p>Visão geral / Produção</p><h1>Dashboard de Produção</h1></div><div class="header-actions"><span class="live"><b></b><span id="last-update">Carregando atualização...</span></span><button id="theme-toggle" aria-label="Alternar tema"><i data-lucide="moon"></i></button><button aria-label="Notificações"><i data-lucide="bell"></i></button><button class="primary" id="refresh"><i data-lucide="refresh-cw"></i>Atualizar</button></div></header>
+  <section class="filters panel filter-grid">
+    <div><label>Ano</label><select id="year"><option value="">Todos</option></select></div>
+    <div><label>Mês</label><select id="month"><option value="">Todos</option><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
+    <div><label>Dia</label><select id="day"><option value="">Todos</option></select></div>
+    <div><label>Gerência</label><select id="manual-management"><option value="">Todas</option></select></div>
+    <div><label>Status</label><select id="status"><option value="">Todos</option></select></div>
+    <div><label>Modalidade</label><select id="modality"><option value="">Todas</option></select></div>
+    <div><label>Produto</label><select id="product"><option value="">Todos</option></select></div>
+    <div><label>Convênio</label><select id="agreement"><option value="">Todos</option></select></div>
+    <div><label>Equipe</label><select id="team"><option value="">Todas</option></select></div>
+    <div><label>Operador</label><select id="operator"><option value="">Todos</option></select></div>
+    <label class="import-button"><i data-lucide="upload"></i>Importar CSV<input id="csv-file" type="file" accept=".csv,text/csv" hidden></label>
+  </section>
+  <section id="analysis-page" class="analysis-page" hidden><div class="analysis-hero"><span id="analysis-eyebrow">ANÁLISE</span><h2 id="analysis-title"></h2><p id="analysis-description"></p></div><div id="analysis-summary" class="analysis-summary"></div><div class="panel analysis-table"><div class="title"><div><h2 id="analysis-table-title"></h2><p>Valores calculados para os filtros selecionados</p></div></div><div id="analysis-table-body"></div></div></section>
+  <section id="kpis" class="kpi-grid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></section>
+  <section id="status-kpis" class="status-kpi-grid"></section>
+  <section class="charts-grid"><article class="panel wide"><div class="title"><div><h2>Produção no período</h2><p>Evolução diária e acumulada</p></div><span class="legend"><b></b>Produção diária</span></div><div id="daily-chart"></div></article><article class="panel"><div class="title"><div><h2>Distribuição por status</h2><p>Composição da produção</p></div><i data-lucide="ellipsis"></i></div><div id="status-chart"></div></article></section>
+  <section class="panel team-chart-panel"><div class="title"><div><h2>Produção por equipe</h2><p>Comparativo das dez equipes com maior valor contratado</p></div></div><div id="team-chart"></div></section>
+  <section class="panel monthly-panel"><div class="title"><div><h2>Integrado mensal e projeção</h2><p>Evolução dos últimos nove meses e tendência de fechamento</p></div></div><div id="monthly-chart"></div></section>
+  <section class="panel story-panel"><div class="story-heading"><span><i data-lucide="book-open-text"></i>STORYTELLING</span><h2>Leitura executiva dos resultados</h2><p>Principais fatos encontrados na seleção atual.</p></div><div id="story-list"></div></section>
+  <section class="bottom-grid"><article class="panel ranking"><div class="title"><div><h2>Ranking de equipes</h2><p>Desempenho no período</p></div><button>Ver todos <i data-lucide="arrow-up-right"></i></button></div><div id="team-list"></div></article><article class="panel insights"><div class="title"><div><h2>Insights inteligentes</h2><p>O que merece sua atenção</p></div><span class="ai-badge"><i data-lucide="sparkles"></i>IA</span></div><div id="insight-list"></div></article></section>
+  <aside id="ai" class="ai-widget" aria-label="Assistente de dados">
+    <button id="ai-toggle" class="ai-toggle" aria-label="Abrir assistente de IA" aria-expanded="false"><i data-lucide="bot"></i><span></span></button>
+    <div id="ai-window" class="ai-window" hidden>
+      <div class="ai-window-header"><div class="ai-robot"><i data-lucide="bot"></i></div><div><strong>BI Analytics AI</strong><small><b></b>Assistente de dados disponível</small></div><button id="ai-close" aria-label="Fechar assistente"><i data-lucide="x"></i></button></div>
+      <div class="ai-context"><i data-lucide="sliders-horizontal"></i>Respostas baseadas nos filtros ativos</div>
+      <div id="messages"><div class="message bot">Olá! Pergunte sobre produção, integrados, equipes, operadores, gerências ou projeções.</div></div>
+      <div class="examples"><button>Quanto foi integrado?</button><button>Top 5 operadores</button><button>Qual equipe lidera?</button></div>
+      <form id="chat-form"><input id="question" placeholder="Pergunte aos seus dados..." autocomplete="off"><button aria-label="Enviar pergunta"><i data-lucide="arrow-up"></i></button></form>
+    </div>
+  </aside>
+</main><div id="toast"></div><script src="./static/js/mock-api.js"></script><script src="./static/js/dashboard.js"></script><script src="./static/js/pages.js"></script>
+</body></html>
